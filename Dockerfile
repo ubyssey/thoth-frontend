@@ -1,7 +1,13 @@
-FROM node:24-alpine
+FROM node:24-slim
 
-WORKDIR /workspaces/frontend
+# Set the working directory inside the container
+WORKDIR /frontend
 
+
+RUN apt-get update
+RUN apt-get install -y git
+
+COPY package.json .
 COPY package-lock.json .
 
 RUN npm install
@@ -9,3 +15,5 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000
+
+CMD ["npm","run", "dev"]
