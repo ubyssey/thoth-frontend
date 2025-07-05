@@ -5,6 +5,55 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
+		<style>
+			body {
+				margin: 0;
+				background-color: #1b1b1f;
+        		font-family: sans-serif;
+				color: white;
+    		}
+			a{
+                color: #a4a4a4;
+                &:visited {
+                    color: #6a6a6a;
+                }
+            }
+			.o-webpage-list-item {
+				margin: 1em 0;
+				* {
+					text-overflow: ellipsis;
+					overflow: clip;
+					white-space: nowrap;
+				}
+				.o-webpage-list-item--url {
+					margin-block: 0.5em;
+					font-size: 0.75em;
+				}
+				.o-webpage-list-item--head {
+					.title {
+						display: inline-block;
+						max-width: 75%;
+						color: white;
+						text-decoration: none;
+					}
+					time {
+						float: right;
+					}
+				}
+			}
+			time {
+				margin-top: 0.4em;
+				font-size: 0.7em;
+			}
+			.c-domain-wall {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1em;
+			}
+			.c-main {
+				padding: 2em;
+			}
+		</style>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>

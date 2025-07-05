@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+    import DomainCard from "$lib/DomainCard.svelte";
+    let {data} = $props();
+</script>
+
+
+<div class="c-main">
+    <div class="c-domain-wall">
+        {#each data.domains as domain}
+            <DomainCard domain={domain} />
+        {/each}
+    </div>
+</div>
