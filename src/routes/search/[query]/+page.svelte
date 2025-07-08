@@ -3,5 +3,4 @@
     let {data} = $props();
 </script>
 
-
-<WebpageWall title={data.domain.title} webpagesByMonth={data.webpagesByMonth} />
+<WebpageWall title={data.query} webpagesByMonth={data.webpagesByMonth} />

@@ -34,6 +34,8 @@
         }
         p {
             line-height: 1.5em;
+            overflow: clip;
+            text-overflow: ellipsis;
         }
         time {
             font-size: 0.75em;
