@@ -1,4 +1,7 @@
+import { redirect } from '@sveltejs/kit';
+
 export async function load() {
+
     console.log("hello?");
     const url = "http://backend:8000/api/domains/?format=json";
     try {

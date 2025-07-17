@@ -1,22 +1,4 @@
-function monthYear({time_updated}) {
-    const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ]
-
-    const date = new Date(time_updated);
-    return months[date.getMonth()] + " " + String(date.getFullYear());
-}
+import { monthYear } from '$lib/timeMethods.js';
 
 export async function load({params}) {
     console.log("hello?");

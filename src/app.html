@@ -5,21 +5,30 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
-		<style>
+		<style lang="scss">
 			html {
 				height: 100%;
 			}
 			body {
 				margin: 0;
 				height: 100%;
-				background-color: #1b1b1f;
+				background-color: var(--background);
         		font-family: sans-serif;
-				color: white;
+				color: var(--text-color);
+
+				--text-color: white;
+				--grey-0: #4d4a4a;
+				--grey-1: #6a6a6a;
+				--grey-2: #a4a4a4;
+
+				--background: #1b1b1f;
+				--background-darker: #161618;
+
     		}
 			a{
-                color: #a4a4a4;
+                color: var(--grey-2);
                 &:visited {
-                    color: #6a6a6a;
+                    color: var(--grey-1);
                 }
             }
 			.o-webpage-list-item {
@@ -37,7 +46,7 @@
 					.title {
 						display: inline-block;
 						max-width: 75%;
-						color: white;
+						color: var(--text-color);
 						text-decoration: none;
 					}
 					time {
@@ -56,6 +65,98 @@
 			}
 			.c-main {
 				padding: 2em;
+			}
+			.c-domain-sidebar {
+				ul {
+					margin-block: 1em;
+					margin-left: 0.5em;
+					padding: 0 0 0 0.5em;
+					list-style: none;
+					overflow: auto;
+					max-height: 75%;
+					box-sizing: border-box;
+					border-left: var(--grey-0) solid 1px;
+					li {
+						margin: 1em 0;
+					}
+				}
+				> ul {
+					margin-block: 0;
+					padding-left: 0;
+					padding-right: 1em;
+					margin-left: 0;
+					border: none;
+				}
+
+				.o-tag-list {
+					> ul {
+						display: none;
+					}
+
+					button {
+						margin-right: 0.5em;
+						background: #eee;
+						border: none;
+						border-radius: 100%;
+						width: 1.5em;
+						aspect-ratio: 1;
+						height: auto;
+
+						transform: rotate(0);
+						transition: transform 0.25s ease-in-out;
+					}
+
+					.o-tag-name {
+						white-space: nowrap;
+						overflow: clip;
+						text-overflow: ellipsis;
+						max-width: 75%;
+						display: inline-block;
+					}
+
+					&.show-list {
+						> ul {
+							display: block;
+						}
+
+						> div button {
+							transform: rotate(90deg);
+						}
+					}
+				}
+        	}
+			.o-card {
+				padding: 1em; 
+				width: 275px;
+				max-width: 300px;
+				flex-grow: 1;
+		
+				border-radius: 1em;
+
+				background-color: var(--background-darker);
+				color: var(--text-color);
+
+				h3 {
+					text-align: center;
+					text-overflow: ellipsis;
+					overflow: clip;
+					a {
+						color: var(--text-color);
+					}
+				}
+
+				ul {
+					padding: 0;
+					list-style: none;
+				}
+			}
+			.o-hidden-add-form {
+				display: inline-block;
+				height: 0;
+				overflow: clip;
+				&:focus-within, &:focus {
+					height: auto;
+				}
 			}
 		</style>
 	</head>

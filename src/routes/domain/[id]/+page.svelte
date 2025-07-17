@@ -1,7 +1,0 @@
-<script>
-    import WebpageWall from "$lib/WebpageWall.svelte";
-    let {data} = $props();
-</script>
-
-
-<WebpageWall title={data.domain.title} webpagesByMonth={data.webpagesByMonth} />
