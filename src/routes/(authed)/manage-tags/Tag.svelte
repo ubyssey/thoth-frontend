@@ -1,12 +1,18 @@
 <script>
     import TagList from "./TagList.svelte";
-    let {tag} = $props();
+    import { enhance } from "$app/forms";
+    let {tag, updateSelectedTag} = $props();
 </script>
 
 <li>
-    <a href="/manage-tags/{tag.id}">{tag.name} {tag.direct_domains.length > 0 ? "(" + String(tag.direct_domains.length) + ")" : ""}</a>
+    <button onclick={() => updateSelectedTag(tag)}>{tag.name} {tag.direct_domains.length > 0 ? "(" + String(tag.direct_domains.length) + ")" : ""}</button>
+
+    <form method="POST" action="?/delete" use:enhance>
+        <input name="id" type="hidden" value="{tag.id}">
+        <input class="delete" type="submit" value="❌">
+    </form>
     {#if tag.direct_domains.length == 0 || tag.children.length > 0}
-    <TagList list={tag.children} tag_name={tag.id} />
+    <TagList list={tag.children} tag_name={tag.id} updateSelectedTag={updateSelectedTag}/>
     {/if}
 </li>
 
@@ -34,6 +40,16 @@
             &:hover {
                 background-color: #eee;
                 color: black;
+            }
+        }
+        form {
+            display: inline;
+            .delete {
+                background: var(--background-darker);
+                color: var(--grey-0);
+                border: none;
+                border-radius: 100%;
+                cursor: pointer;
             }
         }
     }

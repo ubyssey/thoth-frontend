@@ -1,12 +1,14 @@
 <script>
+    import { enhance } from "$app/forms";
     import Tag from "./Tag.svelte";
     import AddCreateForm from "./AddCreateForm.svelte";
-    let {list, tag_name} = $props();
+    let {list, tag_name, updateSelectedTag} = $props();
 
     function slugify(string) {
-        return string.toLowerCase()
+        const slug = string.toLowerCase()
             .replace(/[^\w ]+/g, "")
             .replace(/ +/g, "-");
+        return slug;
     }
 
     let name = $state("");
@@ -16,13 +18,13 @@
 
 <ul>
     {#each list as child}
-        <Tag tag={child} />
+        <Tag tag={child} updateSelectedTag={updateSelectedTag} />
     {/each}
     <li>
         <AddCreateForm />
-        <form class="o-hidden-add-form" method="POST" use:enhance>
+        <form class="o-hidden-add-form" method="POST" action="?/create" use:enhance>
             <input list="flavours" name="name" type="text" bind:value="{name}">
-            <input type="hidden" name="slug" value="{name}">
+            <input type="hidden" name="slug" value="{slug}">
             {#if tag_name != null}
             <input type="hidden" name="parents" value="{tag_name}">
             <input type="hidden" name="is_top_level" value="false">

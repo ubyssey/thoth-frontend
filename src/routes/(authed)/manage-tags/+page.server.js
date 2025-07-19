@@ -22,7 +22,7 @@ export async function load() {
 }
 
 export const actions = {
-    default: async({fetch, request}) => {
+    create: async({fetch, request}) => {
         let data = await request.formData();
         if (data.has("parents")) {
             console.log(data.get("parents"));
@@ -33,6 +33,28 @@ export const actions = {
         const login_api_url = "http://backend:8000/api/tags/";
         try {
             const response = await fetch(login_api_url, {method: 'POST', mode: 'cors', body:data});
+            console.log(response);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const json = await response.json();
+            console.log(json);
+
+        } catch (error) {
+            console.log("failed login oops");
+            console.error(error.message);
+            console.log(error);
+        }
+    },
+
+    delete: async({fetch, request}) => {
+        let data = await request.formData();
+        console.log(data);
+
+        const login_api_url = "http://backend:8000/api/tags/" + data.get("id") + "/";
+        try {
+            const response = await fetch(login_api_url, {method: 'DELETE', mode: 'cors'});
             console.log(response);
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);

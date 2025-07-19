@@ -3,6 +3,7 @@
     
     import DomainListItem from "$lib/DomainListItem.svelte";
     import TagList from "./TagList.svelte";
+    import AddCreateForm from "./AddCreateForm.svelte";
     let {data} = $props();
 
     async function searchDomains(query) {
@@ -28,15 +29,20 @@
         }
     }
 
-    let domainQuery = $state("");
+    let selectedTag = $state(null);
+    let domainQuery = $state("ubc.ca");
     let suggestedDomainsPromise = $derived(searchDomains(domainQuery));
+
+    async function updateSelectedTag(tag) {
+        selectedTag = tag;
+    }
 
 </script>
 
 <div class="c-main">
     <div class="left">
         <div class="c-tags-list">
-            <TagList list={data.tags} tag_name={null}/>
+            <TagList list={data.tags} tag_name={null} updateSelectedTag={updateSelectedTag}/>
 
             <datalist id="flavours" class="add-input">
                 {#each data.tags as tag}
@@ -45,7 +51,28 @@
             </datalist>
         </div>
     </div>
+    {#if selectedTag != null}
     <div class="right">
+        <div>
+            <h1>{selectedTag.name}</h1>
+
+            <ul>
+                {#each selectedTag.direct_domains as domain}
+                <li>{domain.url}</li>
+                {/each}
+
+                <li>
+                    <AddCreateForm />
+                    <form class="o-hidden-add-form" method="POST" action="?/add_domain" use:enhance>
+                        <input name="url" type="text">
+                        <input name="tag" type="hidden" value="{selectedTag.name}">
+                        <input type="submit">
+                    </form>
+                </li>
+
+            </ul>
+        </div>
+
         <div class="c-domain-search">
             <input on type="search" name="search" bind:value="{domainQuery}">
 
@@ -58,16 +85,21 @@
             </ul>
         </div>
     </div>
+    {/if}
 </div>
 
 <style lang="scss">
     .c-main {
         display: flex;
+        flex-grow: 1;
         .left {
-            flex-grow: 1;
+            padding: 2em;
+            width: fit-content;
+            flex-shrink: 0;
         }
         .right {
-            flex-shrink: 0;
+            display: flex;
+            flex-grow: 1;
         }
     }
     .c-tags-list {
@@ -75,11 +107,17 @@
         overflow: auto;
     }
     .c-domain-search {
-        height: 60vh;
-        width: 300px;
+        margin-left: auto;
+        padding: 2em;
+        width: 400px;
+        max-height: 100vh;
+        box-sizing: border-box;
         overflow: auto;
+        flex-direction: column;
+        display: flex;
         ul {
-            padding: 0;
+            overflow: auto;
+            padding: 0 1em 0 0;
             list-style: none;
             li {
                 padding: 0.5em;

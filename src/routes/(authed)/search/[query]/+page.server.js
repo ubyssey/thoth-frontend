@@ -21,18 +21,18 @@ function monthYear({time_updated}) {
 export async function load({params}) {
     console.log("hello?");
 
-    const answers_api_url = "http://backend:8000/api/webpages/?smart-search=" + params.query + "&format=json";
+    const search_api_url = "http://backend:8000/api/webpages/?search=" + params.query + "&format=json";
 
-    let answers = [];
+    let search = [];
     try {
         console.log("truing to fetch?");
-        const answers_response = await fetch(answers_api_url, {method: 'GET', mode: 'cors'});
+        const search_response = await fetch(search_api_url, {method: 'GET', mode: 'cors'});
         //console.log(response);
-        if (!answers_response.ok) {
-        throw new Error(`Response status: ${answers_response.status}`);
+        if (!search_response.ok) {
+        throw new Error(`Response status: ${search_response.status}`);
         }
 
-        answers = await answers_response.json();
+        search = await search_response.json();
 
     } catch (error) {
         console.log("failed oops");
@@ -42,7 +42,6 @@ export async function load({params}) {
 
     return {
         "query": params.query,
-        "answers": answers.results.slice(0,5),
-        "webpagesByMonth": Object.groupBy(answers.results, monthYear),
+        "webpagesByMonth": Object.groupBy(search.results, monthYear),
     };
 }

@@ -19,9 +19,8 @@
         </ul>
         <aside class="c-domain-sidebar">
 
+            <div><a href="/manage-tags">edit</a></div>
             <div class="c-top-level-tags">
-                <a href="/manage-tags">edit</a>
-
             {#each data.tags as top_level, index}
                 {#if index != tagNumber}
                 <button onclick={tagNumber = index}>{top_level.name}</button>
