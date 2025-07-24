@@ -38,7 +38,6 @@
 
 </script>
 
-<TopBar defaultSearchQuery={info.title} />
 <Header info={info} />
 
 <div class="c-answer-bar">
@@ -57,13 +56,15 @@
 
 <style lang="scss">
     .c-answer-bar {
-        margin: 2em;
+        margin: 2.5em;
         display: flex;
         justify-content: center;
+        flex-wrap: wrap;
         gap: 2em;
         .o-answer-bar--answer {
             padding: 1.5em;
-            width: 300px;
+            width: 26%;
+            max-width: 300px;
             border-radius: 1em;
             background: var(--background-darker);
             line-height: 1.5em;

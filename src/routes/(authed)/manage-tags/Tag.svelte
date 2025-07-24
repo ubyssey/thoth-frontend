@@ -1,24 +1,26 @@
 <script>
     import TagList from "./TagList.svelte";
     import { enhance } from "$app/forms";
-    let {tag, updateSelectedTag} = $props();
+    let {tag_id, tags, updateSelectedTag} = $props();
+
+    const tag = $derived(tags.filter((t) => t.id==tag_id)[0]);
+
 </script>
 
 <li>
     <button onclick={() => updateSelectedTag(tag)}>{tag.name} {tag.direct_domains.length > 0 ? "(" + String(tag.direct_domains.length) + ")" : ""}</button>
 
-    <form method="POST" action="?/delete" use:enhance>
+    <form class="o-form-delete-button" method="POST" action="?/delete" use:enhance>
         <input name="id" type="hidden" value="{tag.id}">
         <input class="delete" type="submit" value="❌">
     </form>
     {#if tag.direct_domains.length == 0 || tag.children.length > 0}
-    <TagList list={tag.children} tag_name={tag.id} updateSelectedTag={updateSelectedTag}/>
+    <TagList list={tag.children} tag_name={tag.id} tags={tags} updateSelectedTag={updateSelectedTag}/>
     {/if}
 </li>
 
 <style lang="scss">
     li {
-        position: relative;
         &::before {
             margin: 0.25em;
 
@@ -32,24 +34,20 @@
 
             content: "";
         }
-        a {
+        button {
             padding:  0.5em 0.25em;
             display: inline-block;
-            text-decoration: none;
+            
+            color: var(--text-color);             
+
+            background: none;
+            border: none;
+
+            cursor: pointer;
 
             &:hover {
-                background-color: #eee;
-                color: black;
-            }
-        }
-        form {
-            display: inline;
-            .delete {
-                background: var(--background-darker);
-                color: var(--grey-0);
-                border: none;
-                border-radius: 100%;
-                cursor: pointer;
+                background-color: var(--grey-2);
+                color: var(--background-darker);
             }
         }
     }

@@ -54,5 +54,4 @@ export async function load({fetch, cookies}) {
         console.error(error.message);
         console.log(error);
     }
-
-    }
+}

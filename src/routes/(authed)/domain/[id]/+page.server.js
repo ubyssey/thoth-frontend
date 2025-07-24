@@ -18,7 +18,7 @@ export async function load({params}) {
 
         console.log("truing to fetch?");
         const daomainResponse = await fetch(domain_api_url, {method: 'GET', mode: 'cors'});
-        console.log(daomainResponse);
+        //console.log(daomainResponse);
         if (!daomainResponse.ok) {
             throw new Error(`Response status: ${daomainResponse.status}`);
         }

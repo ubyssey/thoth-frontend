@@ -1,6 +1,7 @@
 <script>
     import { enhance } from "$app/forms";
     
+    import { getTimeSince } from "$lib/timeMethods";
     import DomainListItem from "$lib/DomainListItem.svelte";
     import TagList from "./TagList.svelte";
     import AddCreateForm from "./AddCreateForm.svelte";
@@ -9,7 +10,7 @@
     async function searchDomains(query) {
             
         console.log("hello?");
-        const url = "http://localhost:8000/api/domains/?is_tagged=false&ordering=-time_discovered&search=" + query + "&format=json";
+        const url = "http://localhost:8000/api/domains/?is_tagged=false&ordering=-time_discovered&was_requested=true&search=" + query + "&format=json";
         try {
             console.log("truing to fetch?");
             const response = await fetch(url, {method: 'GET', mode: 'cors'});
@@ -29,12 +30,15 @@
         }
     }
 
+    let roots = $derived(data.tags.filter((t) => t.parents.length === 0).map((t) => t.id));
+
     let selectedTag = $state(null);
     let domainQuery = $state("ubc.ca");
     let suggestedDomainsPromise = $derived(searchDomains(domainQuery));
+    let selected = $derived(selectedTag === null ? null: data.tags.filter((t) => t.id == selectedTag)[0]);
 
     async function updateSelectedTag(tag) {
-        selectedTag = tag;
+        selectedTag = tag.id;
     }
 
 </script>
@@ -42,7 +46,8 @@
 <div class="c-main">
     <div class="left">
         <div class="c-tags-list">
-            <TagList list={data.tags} tag_name={null} updateSelectedTag={updateSelectedTag}/>
+            <h1>Tags</h1>
+            <TagList list={roots} tag_name={null} tags={data.tags} updateSelectedTag={updateSelectedTag}/>
 
             <datalist id="flavours" class="add-input">
                 {#each data.tags as tag}
@@ -51,24 +56,30 @@
             </datalist>
         </div>
     </div>
-    {#if selectedTag != null}
+    {#if selected != null}
     <div class="right">
-        <div>
-            <h1>{selectedTag.name}</h1>
+        <div class="c-tag-domain-list">
+            <h1>{selected.name}</h1>
 
             <ul>
-                {#each selectedTag.direct_domains as domain}
-                <li>{domain.url}</li>
-                {/each}
-
                 <li>
-                    <AddCreateForm />
-                    <form class="o-hidden-add-form" method="POST" action="?/add_domain" use:enhance>
+                    <form method="POST" action="?/add_domain_to_tag" use:enhance>
                         <input name="url" type="text">
-                        <input name="tag" type="hidden" value="{selectedTag.name}">
-                        <input type="submit">
+                        <input name="tag" type="hidden" value="{selected.name}">
+                        <input class="o-input-submit" type="submit" value="Submit">
                     </form>
                 </li>
+
+                {#each selected.direct_domains as domain}
+                <li>
+                    {domain.url}
+                    <form class="o-form-delete-button" method="POST" action="?/remove_domain_from_tag" use:enhance>
+                        <input name="url" type="hidden" value="{domain.url}">
+                        <input name="tag" type="hidden" value="{selected.name}">
+                        <input class="delete" type="submit" value="❌">
+                    </form>
+                </li>
+                {/each}
 
             </ul>
         </div>
@@ -79,7 +90,24 @@
             <ul>
             {#await suggestedDomainsPromise then suggestedDomains}
             {#each suggestedDomains as domain}
-                <DomainListItem domain={domain} /> 
+                <li class="o-domain-option-list-item">
+                    <form class="o-add-form" method="POST" action="?/add_domain_to_tag" use:enhance>
+                        <input name="url" type="hidden" value="{domain.url}">
+                        <input name="tag" type="hidden" value="{selected.name}">
+                        <input class="o-add-button" type="submit" value="+">
+                    </form>
+                    {#if domain.image != "" && domain.image != null}
+                        <img class="o-domain-img o-domain-list-item--image" src="{domain.image}" alt="{domain.title}">
+                    {/if}
+                    <div class="o-webpage-list-item">
+                        <div class="o-webpage-list-item--url">
+                            <a href="{domain.url}" title={domain.url}>{domain.url}</a>
+                        </div>
+                        <div class="o-webpage-list-item--head">
+                            <a href="/domain/{domain.id}/" class="title" title={domain.title}>{domain.title}</a>&#8197; <time datetime={domain.time_discovered}>({getTimeSince(domain.time_discovered)})</time>
+                        </div>
+                    </div>
+                </li>
             {/each}
             {/await}
             </ul>
@@ -90,6 +118,7 @@
 
 <style lang="scss">
     .c-main {
+        padding: 0;
         display: flex;
         flex-grow: 1;
         .left {
@@ -102,9 +131,17 @@
             flex-grow: 1;
         }
     }
-    .c-tags-list {
-        width: fit-content;
-        overflow: auto;
+    .c-tag-domain-list {
+        margin-block: 2em;
+        padding-inline: 2em;
+        border-left: 2px solid var(--grey-0);
+        ul {
+            padding: 0;
+            list-style: none;
+            li {
+                margin-block: 1em;
+            }
+        }
     }
     .c-domain-search {
         margin-left: auto;
@@ -116,12 +153,16 @@
         flex-direction: column;
         display: flex;
         ul {
-            overflow: auto;
             padding: 0 1em 0 0;
             list-style: none;
-            li {
-                padding: 0.5em;
-            }
+            overflow-x: clip;
+            overflow-y: auto;
         }
+    }
+    
+    .o-domain-list-item--image {
+        margin: auto 0.75em 1.5em auto;
+        width: 3em;
+        flex-shrink: 0;
     }
 </style>

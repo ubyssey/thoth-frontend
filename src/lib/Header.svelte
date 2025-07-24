@@ -30,6 +30,7 @@
 
 <style lang="scss">
     .c-page-header {
+        margin: 2em;
         position: relative;
         margin-inline: auto;
         max-width: 800px;

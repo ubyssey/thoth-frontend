@@ -1,5 +1,4 @@
 <script>
-    import TopBar from "$lib/TopBar.svelte";
     import Header from "$lib/Header.svelte";
     import WebpageWall from "$lib/WebpageWall.svelte";
     import DomainCard from "$lib/DomainCard.svelte";
@@ -23,7 +22,6 @@
 
 
 <div class="c-main">
-    <TopBar defaultSearchQuery={data.tag.name} />
     <Header info={info} />
     {#if data.tag.children.length == 0}
         <WebpageWall webpagesByMonth={data.webpagesByMonth} />

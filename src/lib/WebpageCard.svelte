@@ -63,7 +63,10 @@
     {#if webpage.image != "" && webpage.image != null}
     <img class="small" src="{webpage.image}" alt={webpage.title}>
     {/if}
-    <p><time datetime={webpage.time_updated}>{getDateString(webpage.time_updated)}</time> {webpage.description}</p>
+    <p>
+        <time datetime={webpage.time_updated}>{getDateString(webpage.time_updated)}</time> 
+        {webpage.description}
+    </p>
     <p><a href="{webpage.url}" title="{webpage.url}">{webpage.url}</a></p>
 
 </div>

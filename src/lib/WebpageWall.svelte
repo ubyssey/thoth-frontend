@@ -1,15 +1,6 @@
 <script>
     import WebpageCard from "$lib/WebpageCard.svelte";
-    import TopBar from "$lib/TopBar.svelte";
     let {webpagesByMonth} = $props();
-
-    function titleSize(title) {
-        if (title.length > 45) {
-            return "small";
-        } else {
-            return "large";
-        }
-    }
 </script>
 
 <style lang="scss">

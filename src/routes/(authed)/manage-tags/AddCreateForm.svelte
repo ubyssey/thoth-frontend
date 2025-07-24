@@ -4,18 +4,4 @@
     }
 </script>
 
-<button onclick={setFocus}>+</button>
-
-<style lang="scss">
-    button {
-        display: inline-block;
-        border-radius: 100%;
-        border: none;
-
-        background-color: var(--grey-0);
-
-        color: var(--grey-2);
-
-        cursor: pointer;
-    }
-</style>
+<button class="o-add-button" onclick={setFocus}>+</button>

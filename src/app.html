@@ -33,6 +33,7 @@
             }
 			.o-webpage-list-item {
 				margin: 1em 0;
+				width: 100%;
 				* {
 					text-overflow: ellipsis;
 					overflow: clip;
@@ -156,6 +157,108 @@
 				overflow: clip;
 				&:focus-within, &:focus {
 					height: auto;
+				}
+			}
+
+			.c-tags-list {
+				padding-left: 1em;
+				width: fit-content;
+				overflow: auto;
+				border-left: 2px solid var(--grey-0);
+				> ul {
+					padding: 0;
+				}
+			}
+
+			ul.o-tag-manager {
+				margin-bottom: 1em;
+				list-style: none;
+				width: fit-content;
+				li {
+					width: fit-content;
+        			position: relative;
+				}
+			}
+			input[type=text], input[type=password] {
+				padding: 0.5em;
+				background-color: var(--background-darker);
+				border: none;
+				border-bottom: 1px solid var(--grey-0);
+				outline: none;
+				color: var(--text-color);
+			}
+			.o-input-submit {
+				padding: 0.5em 1em;
+				background-color: var(--background-darker);
+				border: none;
+				border-radius: 0.5em;
+				color: var(--grey-2);
+
+				cursor: pointer;
+
+				&:hover {
+					color: var(--text-color);
+				}
+			}
+			form.o-form-delete-button {
+            display: inline;
+				.delete {
+					background: none;
+					color: var(--grey-0);
+					border: none;
+					border-radius: 100%;
+					cursor: pointer;
+				}
+        	}
+			.o-add-form {
+				margin: auto 1em auto 0.5em;
+			}
+			.o-add-button {
+				display: inline-block;
+				border-radius: 100%;
+				border: none;
+
+				background-color: var(--grey-0);
+
+				color: var(--grey-2);
+
+				cursor: pointer;
+			}
+			.o-domain-img {
+				margin: 0.25em 0.5em 0.25em 0;
+				aspect-ratio: 1;
+				width: 2em;
+				height: auto;
+				object-fit: contain;
+				float: left;
+				border-radius: 0.5em;
+				font-size: 0.75em;
+	    	} 
+			.o-domain-option-list-item {
+				display: flex;
+			}
+			.u-dotted {
+				display: flex;
+			} 
+			.dots {
+				margin-inline: 0.25em;
+				margin-bottom: 4px;
+				border-bottom: 2px dotted;
+				flex-grow: 1;
+			}
+			.editor-wrapper {
+				flex-direction: column;
+				display: flex;
+
+				.ql-editor {
+					padding: 15px;
+					min-height: 100px;
+					border: 1px solid aliceblue;
+					border-radius: 0.5em;
+					background: var(--background);
+					&.ql-blank::before {
+						color: var(--grey-2);
+					}
 				}
 			}
 		</style>

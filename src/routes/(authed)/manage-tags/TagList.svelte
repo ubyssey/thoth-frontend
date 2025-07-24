@@ -2,7 +2,7 @@
     import { enhance } from "$app/forms";
     import Tag from "./Tag.svelte";
     import AddCreateForm from "./AddCreateForm.svelte";
-    let {list, tag_name, updateSelectedTag} = $props();
+    let {list, tag_name, tags, updateSelectedTag} = $props();
 
     function slugify(string) {
         const slug = string.toLowerCase()
@@ -16,9 +16,9 @@
 
 </script>
 
-<ul>
+<ul class="o-tag-manager">
     {#each list as child}
-        <Tag tag={child} updateSelectedTag={updateSelectedTag} />
+        <Tag tag_id={child} tags={tags} updateSelectedTag={updateSelectedTag} />
     {/each}
     <li>
         <AddCreateForm />
@@ -31,14 +31,7 @@
             {:else}
             <input type="hidden" name="is_top_level" value="true">
             {/if}
-            <input type="submit">
+            <input class="o-input-submit" type="submit" value="Submit">
         </form>
     </li>
 </ul>
-
-<style lang="less">
-    ul {
-        margin-bottom: 1em;
-        list-style: none;
-    }
-</style>

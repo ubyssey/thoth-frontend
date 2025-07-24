@@ -5,6 +5,6 @@
     let {data} = $props();
 </script>
 
-<TopBar defaultSearchQuery={data.domain.title} />
+<!--<TopBar defaultSearchQuery={data.domain.title} />-->
 <Header info={data.domain} />
 <WebpageWall webpagesByMonth={data.webpagesByMonth} />

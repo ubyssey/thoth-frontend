@@ -1,6 +1,10 @@
 <script>
+    import { enhance } from "$app/forms";
     import DomainListItem from "$lib/DomainListItem.svelte";
     import TagNestedListing from "$lib/TagNestedListing.svelte";
+    import WebpageListItem from "$lib/WebpageListItem.svelte";
+    import "quill/dist/quill.bubble.css";
+    import { onMount } from 'svelte';
     let {data, children} = $props();
 
     let tagNumber = $state(0);
@@ -9,13 +13,92 @@
 
     let tag = $derived(data.tags.length > 0 ? data.tags[tagNumber] : null);
 
+    let info_shelf_text = $state("");
+    let info_shelf_text_sizing = $derived(info_shelf_text.length == 0? "10px" : String(Math.min(Math.floor(200/Math.sqrt(info_shelf_text.length)), 15)) + "px");
+
+    function getSelectedText() {
+        let selectedText = "";
+
+        if (window.getSelection) {
+            selectedText = window.getSelection().toString();
+        } else if (document.getSelection) {
+            selectedText = document.getSelection().toString();
+        } else if (document.selection) {
+            selectedText = document.selection.createRange().text;
+        };
+
+        if (selectedText != "" ) {
+            console.log(selectedText);
+            info_shelf_text = selectedText;
+        }
+    }
+
+    async function searchWebapges(query) {
+        if (query == "") return [];
+
+        console.log("hello?");
+        const url = "http://localhost:8000/api/webpages/?page_size=10&smart-search=" + query + "&format=json";
+        try {
+            console.log("truing to fetch?");
+            const response = await fetch(url, {method: 'GET', mode: 'cors'});
+            //console.log(response);
+            if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+            }
+
+            const json = await response.json();
+            console.log(json);
+            return json.results;
+        } catch (error) {
+            console.log("failed oops");
+            console.error(error.message);
+            console.log(error);
+            return [];
+        }
+    }
+    
+    let editor;
+    let quill = $state(null);
+    const toolbarOptions = [['bold', 'italic'], ['link']];
+
+    onMount(async () => {
+        document.addEventListener("mouseup", getSelectedText);
+
+        const { default: Quill } = await import("quill");
+        
+        quill = new Quill(editor, {
+            modules: {
+                toolbar: toolbarOptions
+            },
+            placeholder: "Tell your truth...",
+            theme: 'bubble',
+        });
+    });
+
+    let note_content = $state(null); 
+
+    function publishNote() {
+        if (quill == null) {
+            return null;
+        }
+        const length = quill.getLength();
+        
+        note_content = quill.getSemanticHTML(0, length);
+        document.getElementById("form-content").value = note_content;
+        document.getElementById("form").submit();
+
+        return note_content;
+    }
+
+    let promised_info_shelf_results = $derived(searchWebapges(info_shelf_text));
+
 </script>
 
 <div class="c-container">
     <nav class="c-sidebar-nav">
         <ul>
             <li><a href="/">Thoth</a></li>
-            <li>Notes</li>
+            <li><a href="/notes/">Notes</a></li>
         </ul>
         <aside class="c-domain-sidebar">
 
@@ -50,13 +133,100 @@
         </div>
     </nav>
 
-    <main>
-        {@render children()}
-    </main>
+    <div class="c-main-flex">
+        <main>
+            {@render children()}
+        </main>
+        <div class="c-info-shelf">
+            <div class="editor-wrapper">
+                <div class="c-editor-username">{data.user.username}</div>
+                <div bind:this={editor}></div>
+                <form id="form" method="POST" action="/notes?/publish" use:enhance>
+                    <input name="text" id="form-content" type="hidden" value={note_content}>
+                </form>
+                <button class="o-publish-button" onclick={publishNote}>Publish</button>
+            </div>
+            <!--<textarea class="c-info-shelf--query" style="--size: {info_shelf_text_sizing}" bind:value={info_shelf_text}></textarea>-->
+
+            {#if info_shelf_text != ""}
+            <div class="c-info-self--query-search"><a href="/search/{info_shelf_text}">Searching</a> {info_shelf_text}</div>
+
+            {#await promised_info_shelf_results}
+            <p>Waiting</p>
+            {:then info_shelf_results}
+            <ul>
+            {#each info_shelf_results as webpage}
+                <WebpageListItem webpage={webpage} domainUrl={null}/>
+            {/each}
+            </ul>
+            {/await}
+            {/if}
+        </div>
+    </div>
 </div>
 
 
 <style lang="scss">
+    .c-main-flex {
+        display: flex;
+        flex-grow: 1;
+        main {
+            flex-grow: 1;
+        }
+        .c-info-self--query-search {
+            margin: 1em auto;
+            text-align: center;
+        }
+        .c-editor-username {
+            margin: 1em 0;
+            
+            font-size: 0.9em;
+            color: var(--grey-2)
+        }
+        .o-publish-button {
+            margin: 1em 0 1em auto;
+
+            border: none;
+            border-radius: 0.5em;
+
+            background: var(--grey-1);
+            color: var(--background-darker);
+        }
+        .c-info-shelf {
+            margin-left: 1em;
+            padding: 1em;
+            position: sticky;
+            top: 0;
+            max-width: 300px;
+            height: 100vh;
+            flex-shrink: 0;
+            background: var(--background-darker);
+            box-sizing: border-box;
+            ul {
+                margin: 0.5em;
+                padding: 0;
+                list-style: none;
+            }
+            .c-info-shelf--query {
+                padding: 1em;
+                
+                width: 100%;
+                height: 100px;
+                resize: none;
+                box-sizing: border-box;
+                
+                border: 1px solid var(--grey-0);
+                border-radius: 0.5em;
+                
+                background: none;
+
+                line-height: 1.5em;
+                font-size: var(--size);
+                font-family: sans-serif;
+                color: var(--text-color);
+            }
+        }
+    }
     .c-domain-sidebar {
         display: none;
         position: absolute;

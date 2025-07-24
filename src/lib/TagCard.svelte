@@ -13,7 +13,7 @@
     
     <ul>
         {#each displayedWebpages as webpage}
-            <WebpageListItem webpage={webpage} domainUrl={""}/>
+            <WebpageListItem webpage={webpage} domainUrl={null}/>
         {/each}
     </ul>
 </div>

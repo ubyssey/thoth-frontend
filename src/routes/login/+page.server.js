@@ -14,7 +14,7 @@ export const actions = {
         const login_api_url = "http://backend:8000/login/"
         try {
             const response = await fetch(login_api_url, {method: 'POST', mode: 'cors', body:data});
-            console.log(response);
+            //console.log(response);
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);
             }
