@@ -11,7 +11,7 @@ export async function load({fetch, cookies}) {
 
     let user = null;
     console.log("hello?");
-    const auth_url = "http://backend:8000/authed-user/?format=json";
+    const auth_url = "http://thoth_backend:8000/authed-user/?format=json";
     try {
         console.log("truing to fetch?");
         const auth_response = await fetch(auth_url, {method: 'GET', mode: 'cors'});
@@ -34,7 +34,7 @@ export async function load({fetch, cookies}) {
     }
 
     console.log("hello?");
-    const url = "http://backend:8000/api/tags-nested/?is_top_level=true&format=json";
+    const url = "http://thoth_backend:8000/api/tags-nested/?is_top_level=true&format=json";
     try {
         console.log("truing to fetch?");
         const response = await fetch(url, {method: 'GET', mode: 'cors'});

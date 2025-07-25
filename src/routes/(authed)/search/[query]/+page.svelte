@@ -13,7 +13,7 @@
     async function getAnswer(query) {
             
         console.log("hello?");
-        const url = "http://localhost:8000/api/answer/?q=" + query + "&format=json";
+        const url = "/api/answer/?q=" + query + "&format=json";
         try {
             console.log("truing to fetch?");
             const response = await fetch(url, {method: 'GET', mode: 'cors'});
