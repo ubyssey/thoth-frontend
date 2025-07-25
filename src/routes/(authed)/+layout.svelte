@@ -40,7 +40,7 @@
         if (query == "") return [];
 
         console.log("hello?");
-        const url = "http://localhost:8000/api/webpages/?page_size=10&smart-search=" + query + "&format=json";
+        const url = "http://localhost:8080/api/webpages/?page_size=10&smart-search=" + query + "&format=json";
         
         let webpages = []
         try {

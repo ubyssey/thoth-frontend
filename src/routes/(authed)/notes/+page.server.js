@@ -4,7 +4,7 @@ export async function load({params, fetch}) {
 
     let notes = null;
     console.log("hello?");
-    const notes_url = "http://backend:8000/api/notes/?format=json";
+    const notes_url = "http://backend:8080/api/notes/?format=json";
     try {
         console.log("truing to fetch?");
         const notes_response = await fetch(notes_url, {method: 'GET', mode: 'cors'});
@@ -32,7 +32,7 @@ export const actions = {
 
         let data = await request.formData();
 
-        const notes_api_url = "http://backend:8000/api/notes/";
+        const notes_api_url = "http://backend:8080/api/notes/";
         try {
             const response = await fetch(notes_api_url, {method: 'POST', mode: 'cors', body:data});
             //console.log(response);
