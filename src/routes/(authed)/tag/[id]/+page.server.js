@@ -2,7 +2,7 @@ import { monthYear } from '$lib/timeMethods.js';
 
 export async function load({params}) {
     console.log("hello?");
-    const url = "http://backend:8080/api/tags-nested/" + params.id + "/?format=json";
+    const url = "http://backend:8000/api/tags-nested/" + params.id + "/?format=json";
     try {
         console.log("truing to fetch? " + url);
         const response = await fetch(url, {method: 'GET', mode: 'cors'});

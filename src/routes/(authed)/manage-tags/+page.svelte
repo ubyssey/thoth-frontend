@@ -10,7 +10,7 @@
     async function searchDomains(query) {
             
         console.log("hello?");
-        const url = "http://localhost:8080/api/domains/?is_tagged=false&ordering=-time_discovered&was_requested=true&search=" + query + "&format=json";
+        const url = "http://localhost:8000/api/domains/?is_tagged=false&ordering=-time_discovered&was_requested=true&search=" + query + "&format=json";
         try {
             console.log("truing to fetch?");
             const response = await fetch(url, {method: 'GET', mode: 'cors'});

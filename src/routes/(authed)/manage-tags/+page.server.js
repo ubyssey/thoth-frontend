@@ -1,6 +1,6 @@
 export async function load() {
     console.log("hello?");
-    const url = "http://backend:8080/api/tags/?is_root=true&format=json";
+    const url = "http://backend:8000/api/tags/?is_root=true&format=json";
     try {
         console.log("truing to fetch?");
         const response = await fetch(url, {method: 'GET', mode: 'cors'});
@@ -30,7 +30,7 @@ export const actions = {
         }
         console.log(data);
 
-        const login_api_url = "http://backend:8080/api/tags/";
+        const login_api_url = "http://backend:8000/api/tags/";
         try {
             const response = await fetch(login_api_url, {method: 'POST', mode: 'cors', body:data});
             //console.log(response);
@@ -52,7 +52,7 @@ export const actions = {
         let data = await request.formData();
         console.log(data);
 
-        const login_api_url = "http://backend:8080/api/tags/" + data.get("id") + "/";
+        const login_api_url = "http://backend:8000/api/tags/" + data.get("id") + "/";
         try {
             const response = await fetch(login_api_url, {method: 'DELETE', mode: 'cors'});
             //console.log(response);
@@ -73,7 +73,7 @@ export const actions = {
     add_domain_to_tag: async({fetch, request}) => {
         const data = await request.formData();
         console.log(data);
-        const add_domain_api_url = "http://backend:8080/api/tags/domains/";
+        const add_domain_api_url = "http://backend:8000/api/tags/domains/";
 
         try {
             const response = await fetch(add_domain_api_url, {method: 'PUT', mode: 'cors', body:data});
@@ -93,7 +93,7 @@ export const actions = {
     remove_domain_from_tag: async({fetch, request}) => {
         const data = await request.formData();
         console.log(data);
-        const add_domain_api_url = "http://backend:8080/api/tags/domains/";
+        const add_domain_api_url = "http://backend:8000/api/tags/domains/";
 
         try {
             const response = await fetch(add_domain_api_url, {method: 'DELETE', mode: 'cors', body:data});

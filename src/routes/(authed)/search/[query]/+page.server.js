@@ -21,7 +21,7 @@ function monthYear({time_updated}) {
 export async function load({params}) {
     console.log("hello?");
 
-    const search_api_url = "http://backend:8080/api/webpages/?search=" + params.query + "&format=json";
+    const search_api_url = "http://backend:8000/api/webpages/?search=" + params.query + "&format=json";
 
     let search = [];
     try {
