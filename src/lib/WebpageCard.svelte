@@ -15,7 +15,7 @@
 <style lang="scss">
     .o-card {
         padding: 1em;
-        max-width: 300px;
+        max-width: 370px;
         flex-grow: 1;
   
         border-radius: 1em;

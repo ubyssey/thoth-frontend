@@ -1,6 +1,7 @@
 <script>
     import { enhance } from "$app/forms";
     import DomainListItem from "$lib/DomainListItem.svelte";
+    import DomainSearchResults from "$lib/DomainSearchResults.svelte";
     import TagNestedListing from "$lib/TagNestedListing.svelte";
     import WebpageListItem from "$lib/WebpageListItem.svelte";
     import "quill/dist/quill.bubble.css";
@@ -13,6 +14,7 @@
 
     let tag = $derived(data.tags.length > 0 ? data.tags[tagNumber] : null);
 
+    let info_shelf_state = $state(true);
     let info_shelf_text = $state("");
     let info_shelf_text_sizing = $derived(info_shelf_text.length == 0? "10px" : String(Math.min(Math.floor(200/Math.sqrt(info_shelf_text.length)), 15)) + "px");
 
@@ -30,6 +32,7 @@
         if (selectedText != "" ) {
             console.log(selectedText);
             info_shelf_text = selectedText;
+            info_shelf_state = true;
         }
     }
 
@@ -38,6 +41,8 @@
 
         console.log("hello?");
         const url = "http://localhost:8000/api/webpages/?page_size=10&smart-search=" + query + "&format=json";
+        
+        let webpages = []
         try {
             console.log("truing to fetch?");
             const response = await fetch(url, {method: 'GET', mode: 'cors'});
@@ -48,13 +53,18 @@
 
             const json = await response.json();
             console.log(json);
-            return json.results;
+            webpages = json.results;
+
+            
         } catch (error) {
             console.log("failed oops");
             console.error(error.message);
             console.log(error);
             return [];
         }
+
+        const webpagesByDomain = Object.groupBy(webpages, (w) => w.domain.id);
+        return webpagesByDomain;
     }
     
     let editor;
@@ -109,14 +119,6 @@
                 <button onclick={tagNumber = index}>{top_level.name}</button>
                 {/if}
             {/each}
-            <!--
-            <form action="http://localhost:8000/api/tags/" method="POST" enctype="multipart/form-data" class="form-horizontal" novalidate="">
-                <input name="name" class="form-control" type="text">
-                <input name="slug" class="form-control" type="text">
-                <input type="hidden" name="is_top_level" value="true">
-                <input type="submit">
-            </form>
-            -->
             </div>
 
             {#if tag}
@@ -138,29 +140,36 @@
             {@render children()}
         </main>
         <div class="c-info-shelf">
-            <div class="editor-wrapper">
-                <div class="c-editor-username">{data.user.username}</div>
-                <div bind:this={editor}></div>
-                <form id="form" method="POST" action="/notes?/publish" use:enhance>
-                    <input name="text" id="form-content" type="hidden" value={note_content}>
-                </form>
-                <button class="o-publish-button" onclick={publishNote}>Publish</button>
+            <div class="c-info-shelf--buttons">
+                <button class="c-info-shelf--button" onclick={() => info_shelf_state = info_shelf_state == false}>{info_shelf_state}</button>
             </div>
-            <!--<textarea class="c-info-shelf--query" style="--size: {info_shelf_text_sizing}" bind:value={info_shelf_text}></textarea>-->
 
-            {#if info_shelf_text != ""}
-            <div class="c-info-self--query-search"><a href="/search/{info_shelf_text}">Searching</a> {info_shelf_text}</div>
+            <div class="c-info-shelf--contents {info_shelf_state}">
 
-            {#await promised_info_shelf_results}
-            <p>Waiting</p>
-            {:then info_shelf_results}
-            <ul>
-            {#each info_shelf_results as webpage}
-                <WebpageListItem webpage={webpage} domainUrl={null}/>
-            {/each}
-            </ul>
-            {/await}
-            {/if}
+                <div class="editor-wrapper">
+                    <div class="c-editor-username">{data.user.username}</div>
+                    <div bind:this={editor}></div>
+                    <form id="form" method="POST" action="/notes?/publish" use:enhance>
+                        <input name="text" id="form-content" type="hidden" value={note_content}>
+                    </form>
+                    <button class="o-publish-button" onclick={publishNote}>Publish</button>
+                </div>
+                <!--<textarea class="c-info-shelf--query" style="--size: {info_shelf_text_sizing}" bind:value={info_shelf_text}></textarea>-->
+
+                {#if info_shelf_text != ""}
+                <div class="c-info-shelf--query-search">Searching: <a href="/search/{info_shelf_text}">{info_shelf_text}</a></div>
+
+                {#await promised_info_shelf_results}
+                <p>Waiting</p>
+                {:then info_shelf_results}
+                <ul class="c-info-shelf--results">
+                {#each Object.keys(info_shelf_results) as webpagesByDomain}
+                    <DomainSearchResults webpages={info_shelf_results[webpagesByDomain]}/>
+                {/each}
+                </ul>
+                {/await}
+                {/if}
+            </div>
         </div>
     </div>
 </div>
@@ -173,9 +182,10 @@
         main {
             flex-grow: 1;
         }
-        .c-info-self--query-search {
+        .c-info-shelf--query-search {
             margin: 1em auto;
             text-align: center;
+            font-size: 0.9em;
         }
         .c-editor-username {
             margin: 1em 0;
@@ -184,7 +194,7 @@
             color: var(--grey-2)
         }
         .o-publish-button {
-            margin: 1em 0 1em auto;
+            margin: 1em 0 0 auto;
 
             border: none;
             border-radius: 0.5em;
@@ -194,19 +204,39 @@
         }
         .c-info-shelf {
             margin-left: 1em;
-            padding: 1em;
+            padding: 1em 1em 2em 1em;
             position: sticky;
             top: 0;
             max-width: 300px;
             height: 100vh;
+            
+            display: flex;
+            flex-direction: column;
             flex-shrink: 0;
             background: var(--background-darker);
             box-sizing: border-box;
-            ul {
-                margin: 0.5em;
-                padding: 0;
-                list-style: none;
+
+            .c-info-shelf--buttons {
+                display: flex;
+                justify-content: right;
+                .c-info-shelf--button {
+                    border: none;
+                    border-radius: 0.5em;
+                        
+                    background: var(--grey-1);
+                    color: var(--background-darker);
+                }
             }
+
+            .c-info-shelf--contents {
+                &.true {
+                    display: contents;
+                }
+                &.false {
+                    display: none;
+                }
+            }
+
             .c-info-shelf--query {
                 padding: 1em;
                 

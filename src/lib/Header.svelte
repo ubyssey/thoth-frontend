@@ -50,7 +50,6 @@
             width: fit-content;
             
             line-height: 1.5em;
-            text-align: justify;
         }
         p.url {
             text-align: center;

@@ -7,6 +7,7 @@
 <style lang="scss">
     .o-card {
         padding: 1em;
+        width: 250px;
         max-width: 300px;
         flex-grow: 1;
   

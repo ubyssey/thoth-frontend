@@ -1,4 +1,5 @@
 <script>
+    import Note from './Note.svelte';
     import { onMount } from 'svelte';
     import "quill/dist/quill.bubble.css";
 
@@ -11,12 +12,9 @@
     }
 </script>
 
-
+<h1>Notes</h1>
 <div class="c-note-feed">
     {#each data.notes as note}
-    <div class="o-note">
-        <div>{note.user.username} {note.time_published}</div>
-        {@html note.text}
-    </div>
+        <Note note={note} />
     {/each}
 </div>
