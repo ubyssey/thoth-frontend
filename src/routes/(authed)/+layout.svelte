@@ -40,7 +40,7 @@
         if (query == "") return [];
 
         console.log("hello?");
-        const url = "/api/webpages/?page_size=10&smart-search=" + query + "&format=json";
+        const url = "http://api.thoth.ubyssey.ca/api/webpages/?page_size=10&smart-search=" + query + "&format=json";
         
         let webpages = []
         try {

@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 export async function load() {
 
     console.log("hello?");
-    const url = "http://thoth_backend:8000/api/domains/?format=json";
+    const url = "http://thothbackend:8000/api/domains/?format=json";
     try {
         console.log("truing to fetch?");
         const response = await fetch(url, {method: 'GET', mode: 'cors'});
