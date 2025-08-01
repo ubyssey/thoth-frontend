@@ -12,11 +12,10 @@ export async function load({params}) {
         }
 
         const tag = await response.json();
-        //console.log(tag);
+        console.log(tag);
 
         return {
-            "tag": tag,
-            "webpagesByMonth": Object.groupBy(tag.webpages, (({time_updated}) => getPrettyDateString(time_updated)))
+            "tag": tag
         };
     } catch (error) {
         console.log("failed oops " + url);

@@ -24,6 +24,6 @@ export async function load({params}) {
 
     return {
         "query": params.query,
-        "webpagesByMonth": Object.groupBy(search.results, (({time_updated}) => getPrettyDateString(time_updated))),
+        "webpages": search.results
     };
 }

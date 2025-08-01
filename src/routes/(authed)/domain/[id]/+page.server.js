@@ -28,8 +28,7 @@ export async function load({params}) {
 
         return {
             "domain": domain,
-            "webpages": webpages.results,
-            "webpagesByMonth": Object.groupBy(webpages.results, (({time_updated}) => getPrettyDateString(time_updated))),
+            "webpages": webpages.results
         };
     } catch (error) {
         console.log("failed oops");

@@ -23,7 +23,7 @@
     <p class="url"><a href="{info.url}">{info.url}</a></p>
     {/if}
     {#if info.description}
-    <p class="description">{info.description}</p>
+    <p class="description">{@html info.description}</p>
     {/if}
 </div>
 

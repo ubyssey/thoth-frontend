@@ -1,4 +1,6 @@
 <script>
+    import { monthYear } from "$lib/timeMethods.js";
+
     import TopBar from "$lib/TopBar.svelte";
     import Header from "$lib/Header.svelte";
     import WebpageWall from "$lib/WebpageWall.svelte";
@@ -35,6 +37,8 @@
 
     let domainQuery = $state("");
     let promisedAnswers = $derived(getAnswer(data.query));
+
+    let webpagesByMonth = $derived(Object.groupBy(data.webpages, monthYear));
 
 </script>
 
@@ -90,4 +94,4 @@
     }
 </style>
 
-<WebpageWall webpagesByMonth={data.webpagesByMonth} />
+<WebpageWall webpagesByMonth={webpagesByMonth} />

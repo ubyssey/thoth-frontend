@@ -1,4 +1,6 @@
 <script>
+    import { getPrettyDateString } from "$lib/timeMethods.js";
+
     import Header from "$lib/Header.svelte";
     import WebpageWall from "$lib/WebpageWall.svelte";
     import DomainCard from "$lib/DomainCard.svelte";
@@ -8,8 +10,10 @@
 
     let info = $derived({
         "title": data.tag.name,
-        "description": data.tag.direct_domains.map((domain) => domain.title).concat(data.tag.children.map((tag) => tag.name)).join(", ")
+        "description": data.tag.direct_domains.map((domain) => "<a href='/domain/"+ domain.id + "/' title='" + domain.title + "'>" + domain.url.split("//")[1] + "</a>").concat(data.tag.children.map((tag) => tag.name)).join(", ")
     });
+
+    let webpagesByDay = $derived(Object.groupBy(data.tag.webpages, (({time_updated}) => getPrettyDateString(time_updated))));
 
     function titleSize(title) {
         if (title.length > 45) {
@@ -24,7 +28,7 @@
 <div class="c-main">
     <Header info={info} />
     {#if data.tag.children.length == 0}
-        <WebpageWall webpagesByMonth={data.webpagesByMonth} />
+        <WebpageWall webpagesByMonth={webpagesByDay} />
     {:else}
         <div class="c-domain-wall">
         {#each data.tag.direct_domains as domain}
