@@ -1,7 +1,5 @@
 import { redirect } from '@sveltejs/kit';
 
-import { getPrettyDateString } from '$lib/timeMethods';
-
 export async function load() {
 
     let webpages = [];
@@ -25,7 +23,7 @@ export async function load() {
     }
 
     return {
-        "webpagesByDay": Object.groupBy(webpages, (({time_updated}) => getPrettyDateString(time_updated)))
+        "webpages": webpages
     }
 
     }

@@ -164,6 +164,30 @@
 					}
 				}
 			}
+			.o-card--domain-header {
+				display: flex;
+				width: fit-content;
+				margin-inline: auto;
+					&.no-image {
+						text-align: center;
+					}
+					img.domain {
+						width: 2em;
+						border-radius: 0.5em;
+					}
+					.o-card--domain-header-title {
+						margin-block: auto;
+						padding-inline: 0.75em;
+						font-size: 0.75em;
+						text-transform: uppercase;
+						font-weight: 600;
+						
+						a {
+							color: white;
+							text-decoration: none;
+						}
+					}
+				}
 			.o-hidden-add-form {
 				display: inline-block;
 				height: 0;
