@@ -1,22 +1,4 @@
-function monthYear({time_updated}) {
-    const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ]
-
-    const date = new Date(time_updated);
-    return months[date.getMonth()] + " " + String(date.getFullYear());
-}
+import { getPrettyDateString } from '$lib/timeMethods.js';
 
 export async function load({params}) {
     console.log("hello?");
@@ -42,6 +24,6 @@ export async function load({params}) {
 
     return {
         "query": params.query,
-        "webpagesByMonth": Object.groupBy(search.results, monthYear),
+        "webpagesByMonth": Object.groupBy(search.results, (({time_updated}) => getPrettyDateString(time_updated))),
     };
 }

@@ -1,4 +1,4 @@
-import { monthYear } from '$lib/timeMethods.js';
+import { getPrettyDateString } from '$lib/timeMethods.js';
 
 export async function load({params}) {
     console.log("hello?");
@@ -29,7 +29,7 @@ export async function load({params}) {
         return {
             "domain": domain,
             "webpages": webpages.results,
-            "webpagesByMonth": Object.groupBy(webpages.results, monthYear),
+            "webpagesByMonth": Object.groupBy(webpages.results, (({time_updated}) => getPrettyDateString(time_updated))),
         };
     } catch (error) {
         console.log("failed oops");

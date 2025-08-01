@@ -1,5 +1,5 @@
 <script>
-    import {getTimeSince, getDateString} from "$lib/timeMethods.js";
+    import {getTimeSince, getDateString, getTimeString} from "$lib/timeMethods.js";
     import CardDomainHeader from "./CardDomainHeader.svelte";
 	let { webpage } = $props();
 
@@ -48,10 +48,6 @@
             border-radius: 100%;
             float: right;
         }
-        time {
-            font-size: 0.75em;
-            margin-right: 1em;
-        }
     }
 </style>
 
@@ -64,7 +60,7 @@
     <img class="small" src="{webpage.image}" alt={webpage.title}>
     {/if}
     <p>
-        <time datetime={webpage.time_updated}>{getDateString(webpage.time_updated)}</time> 
+        <span class="o-card--time">{#if webpage.time_updated != webpage.time_published && webpage.time_updated != null}Mod. <time datetime={webpage.time_updated}>{getTimeString(webpage.time_updated) + (getDateString(webpage.time_updated) != getDateString(webpage.time_published) ? " " + getDateString(webpage.time_updated): "")}</time>{#if webpage.time_published != null },&#8197;{/if}{/if}{#if webpage.time_published != null }Pub. <time datetime={webpage.time_published}>{(getDateString(webpage.time_updated) == getDateString(webpage.time_published) ? getTimeString(webpage.time_published) + " " : "") + getDateString(webpage.time_published)}</time>{/if}</span>
         {webpage.description}
     </p>
     <p><a href="{webpage.url}" title="{webpage.url}">{webpage.url}</a></p>

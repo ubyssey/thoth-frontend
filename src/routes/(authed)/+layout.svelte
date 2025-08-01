@@ -75,10 +75,15 @@
         document.addEventListener("mouseup", getSelectedText);
 
         const { default: Quill } = await import("quill");
-        
+
+        const {default: AutoLinks} =  await import("quill-auto-links");
+ 
+        Quill.register('modules/autoLinks', AutoLinks);
+ 
         quill = new Quill(editor, {
             modules: {
-                toolbar: toolbarOptions
+                toolbar: toolbarOptions,
+                    autoLinks: true
             },
             placeholder: "Tell your truth...",
             theme: 'bubble',

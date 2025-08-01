@@ -1,11 +1,12 @@
 <script>
+    import { getPrettyDateString } from "$lib/timeMethods";
     let {note} = $props();
 </script>
 
 <div class="o-note--conatiner">
     <div class="o-note">
-        <div>{note.user.username} {note.time_published}</div>
-        {@html note.text}
+        <div class="o-note--header">{note.user.username} <time datetime={note.time_published}>{getPrettyDateString(note.time_published)}</time></div>
+        {@html note.text.replaceAll("&nbsp;", " ")}
     </div>
 
     <ul class="o-note-links">

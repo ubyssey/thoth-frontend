@@ -60,7 +60,7 @@
     <div class="o-month">
         <h3>{month}</h3>
         <div class="c-domain-wall">
-            {#each domainsByMonth[month] as domain}
+            {#each domainsByMonth[month].sort((({time_updated}) => time_updated)).reverse() as domain}
                 <DomainCard domain={domain}/>      
             {/each}
         </div>

@@ -1,12 +1,13 @@
 <script>
-    import DomainCard from "$lib/DomainCard.svelte";
+    import Header from "$lib/Header.svelte";
+    import WebpageWall from "$lib/WebpageWall.svelte";
     let {data} = $props();
+
+    const info = {
+        "title": "Thoth",
+        "description": "Perhaps the beginning but never the end..."
+    }
 </script>
 
-<div class="c-main">
-    <div class="c-domain-wall">
-        {#each data.domains as domain}
-            <DomainCard domain={domain} />
-        {/each}
-    </div>
-</div>
+<Header info={info} />
+<WebpageWall webpagesByMonth={data.webpagesByDay} />

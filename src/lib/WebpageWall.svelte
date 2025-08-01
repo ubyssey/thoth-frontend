@@ -13,7 +13,7 @@
 <div class="o-month">
     <h3>{month}</h3>
     <div class="c-domain-wall">
-        {#each webpagesByMonth[month] as webpage}
+        {#each webpagesByMonth[month].sort((({time_updated}) => time_updated)).reverse() as webpage}
             <WebpageCard webpage={webpage}/>      
         {/each}
     </div>
