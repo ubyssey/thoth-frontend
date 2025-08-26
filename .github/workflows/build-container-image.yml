@@ -1,10 +1,9 @@
-name: Deploy to production
+name: Create thoth-frontend docker image
 
 on:
   release:
     types: [published]
-  push:
-    branches: [1-run-ubysseyca-and-thothubysseyca-as-isolated-apps-on-docker-swarm-vm]
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
